@@ -27,7 +27,7 @@ pip install -r requirements.txt
 ```
 python training.py --input_file "Your file name"
 ```
-##Citation
-####If you use this code or data, please cite:
+## Citation
+#### If you use this code or data, please cite:
 
 Top Tox method paper:
