@@ -21,7 +21,7 @@ conda env create -f environment.yml
 ```
 conda activate top_tox
 ```
-### Instal pip dependencies
+### Install pip dependencies
 ```
 pip install -r requirements.txt
 ```
