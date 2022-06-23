@@ -1,0 +1,13 @@
+params:
+  label_column: Class
+  unnecessary_columns: []
+  value_1: Non-Toxic
+  value_2: Toxic
+  test_size: 0.20
+
+artifacts:
+  artifacts_dir: artifacts
+  model_dir: model
+  plots_dir: plots
+  plot: plots.png
+  model_name: model.pkl
