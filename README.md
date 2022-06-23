@@ -23,3 +23,7 @@ conda activate top_tox
 ```
 pip install -r requirements.txt
 ```
+### Training all classification model
+```
+python training.py --input_file "Your file name"
+```
