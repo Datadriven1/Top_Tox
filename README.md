@@ -4,22 +4,22 @@ It is a module of multiple classification models that predicts the hepatotoxicit
 
 ## Installation with Anaconda
 
-# Clone the reopsitory to your desired directory
+### Clone the reopsitory to your desired directory
 ```
 git clone https://github.com/Datadriven1/Top_Tox.git
 ```
 ```
 cd Top_Tox
 ```
-# Create new conda environment with Python 3.8.13
+#### Create new conda environment with Python 3.8.13
 ```
 conda env create -f environment.yml
 ```
-# Activate the environment
+### Activate the environment
 ```
 conda activate top_tox
 ```
-# Instal pip dependencies
+### Instal pip dependencies
 ```
 pip install -r requirements.txt
 ```
