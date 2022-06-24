@@ -7,6 +7,7 @@ from sklearn.decomposition import PCA
 import os
 import pickle
 from imblearn.over_sampling import KMeansSMOTE
+from imblearn.over_sampling import SMOTE
 
 def read_config(config_path):
     with open(config_path) as config_file:
@@ -116,6 +117,12 @@ def save_model(model, model_name, model_dir_path):
 ## create a function that oversample data of both classes using smote technique
 def oversample_data(x, y):
     
-    sm = KMeansSMOTE(sampling_strategy={0:2500, 1:2500})
+    sm = KMeansSMOTE(sampling_strategy={0:4000, 1:4000})
     x, y = sm.fit_resample(x, y)
     return x, y
+
+## create a function that oversample data using smote technique
+def oversample_data_minor_class(x, y):
+        sm = SMOTE()
+        x, y = sm.fit_resample(x, y)
+        return x, y

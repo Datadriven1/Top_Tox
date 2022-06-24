@@ -9,5 +9,6 @@ artifacts:
   artifacts_dir: artifacts
   model_dir: model
   plots_dir: plots
+  plots_dir1: analysis_plots
   plot: plots.png
   model_name: model.pkl
