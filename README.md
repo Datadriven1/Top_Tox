@@ -1,6 +1,4 @@
 # Top_Tox
-<<<<<<< HEAD
-=======
 It is a module of multiple classification models that predicts the hepatotoxicity and classifies the compounds as "Toxic" or "Non-Toxic"
 
 #### environment.yml file currently works only under Linux. If you want to use this code, Install pip requirement from requirements.txt
@@ -35,4 +33,3 @@ python training.py --input_file "Your file name"
 #### If you use this code or data, please cite:
 
 Top Tox method paper:
->>>>>>> bd6e053afb1c2890571e258317fd4690defcde2e
