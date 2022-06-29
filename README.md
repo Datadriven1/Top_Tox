@@ -32,4 +32,8 @@ python training.py --input_file "Your file name"
 ## Citation
 #### If you use this code or data, please cite:
 
+<<<<<<< HEAD
 Top Tox method paper:
+=======
+Top Tox method paper:
+>>>>>>> 55a56f28af3db94709e3d4d41cbc6c7839bd02a4
