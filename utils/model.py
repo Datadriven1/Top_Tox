@@ -1,14 +1,14 @@
 from utils.all_utils import *
-import numpy as np
 import csv
 import os
-import matplotlib.pyplot as plt
+from sklearn.model_selection import cross_val_score
+from statistics import mean
 
 # Importing error metrics
 from sklearn.metrics import mean_squared_error,mean_absolute_error, r2_score, accuracy_score, confusion_matrix, classification_report
 
 
-def all_classification_model(model_list, x_train, y_train, x_test, y_test, data_used, dataset_name):
+def all_classification_model(model_list, x_train, y_train, x_test, y_test, data_used, dataset_name, x, y):
     predp_list = []
     for p in model_list:
         p.fit(x_train,y_train)
@@ -20,7 +20,7 @@ def all_classification_model(model_list, x_train, y_train, x_test, y_test, data_
         print('classification_report: \n', classification_report(y_test,predp))
         print('********************************************************************************************')
         print('\n')
-        headers = ['Test accuracy',"weighted avg precision","weighted avg recall","weighted avg f1-score","True Positive","False Positive","False Negative","True Negative","Sensitivity score", "Specificity","model_name", "features_used"]
+        headers = ['Test accuracy',"weighted avg precision","weighted avg recall","weighted avg f1-score","True Positive","False Positive","False Negative","True Negative","Sensitivity score", "Specificity", "Avg_5KCV_Score", "model_name", "features_used"]
         t_s = p.score(x_train,y_train)
         test_s = accuracy_score(y_test,predp)
         c_r = classification_report(y_test,predp).split('\n')
@@ -29,9 +29,11 @@ def all_classification_model(model_list, x_train, y_train, x_test, y_test, data_
         tp, fp, fn, tn = confusion_matrix(y_test,predp).ravel()
         Sensitivity = tp/(tp+fn)
         Specificity = tn/(tn+fp)
+        clf = p
+        scores = cross_val_score(clf, x, y, cv=5)
         f = open(f"result/{dataset_name}.csv", "a", newline="")
         file_is_empty = os.stat(f"result/{dataset_name}.csv").st_size == 0
-        tup1 = (test_s,w[1].replace(" ", ""),w[2].replace(" ", ""),w[3].replace(" ", ""),tp,fp,fn,tn,Sensitivity,Specificity,p, data_used)
+        tup1 = (test_s,w[1].replace(" ", ""),w[2].replace(" ", ""),w[3].replace(" ", ""),tp,fp,fn,tn,Sensitivity,Specificity,mean(scores),p, data_used)
         writer = csv.writer(f)
         if file_is_empty:
             writer.writerow(headers)
@@ -44,7 +46,7 @@ def all_classification_model(model_list, x_train, y_train, x_test, y_test, data_
 
 
 def single_classification_model(model_name, x_train, y_train, x_test, y_test):
-    b_model = model_name(n_estimators=20000, criterion="friedman_mse", learning_rate=0.001)
+    b_model = model_name()
     b_model.fit(x_train,y_train)
     print('score of:', model_name, "is" , b_model.score(x_train,y_train))
     b_model_pred = b_model.predict(x_test)
@@ -53,4 +55,4 @@ def single_classification_model(model_name, x_train, y_train, x_test, y_test):
     print('confusion_matrix: \n', confusion_matrix(y_test,b_model_pred))
     print('classification_report: \n', classification_report(y_test,b_model_pred))
     print('\n')
-    return b_model_pred
+    return b_model

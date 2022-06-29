@@ -13,6 +13,7 @@ args = argparse.ArgumentParser()
 
 args.add_argument("--config", "-c", help="Path to config file", default="config.yaml")
 args.add_argument("--input_file", help="Path to input file", type=str, default="Clean_mordred_descriptors_with_binary_class.csv")
+args.add_argument("--predication_input_file", help="Path to predication input file", type=str, default="Clean_mordred_descriptors_with_binary_class.csv")
 parsed_args = args.parse_args()
 
 def training(config_path):
@@ -21,6 +22,8 @@ def training(config_path):
 
     df = read_file(parsed_args.input_file)
     print(f"original dataset shape \n {df.shape}")
+
+    df_p = read_file(parsed_args.predication_input_file)
 
     print(f"Value counts of classes: \n {df[config['params']['label_column']].value_counts()}")
 
@@ -49,12 +52,15 @@ def training(config_path):
     print(f"x shape: {x.shape}")
     print(f"y shape: {y.shape}")
  
+    x_p, y_p = split_data(df_p, label_column)
 
     # x = remove_correlated_columns(x, 0.9)
     # print(f"x shape after removing correlated columns {x.shape}")
 
 
     x = standard_scaling_data(x, x)
+
+    x_p = standard_scaling_data(x, x_p)    
 
     x, y = oversample_data_minor_class(x, y)
 
@@ -71,22 +77,7 @@ def training(config_path):
     
     pred = all_classification_model(model_list, x_train, y_train, x_test, y_test, parsed_args.input_file.split("/")[-1].split(".")[-2], parsed_args.input_file.split("/")[-2], x, y)
 
-    model_list_1 = []
-    for i in model_list:
-        model_list_1.append(str(type(i)).split(".")[-1].replace("'>",""))
-
-    artifacts_dir = config["artifacts"]["artifacts_dir"]
-
-    plots_dir = config["artifacts"][f"plots_dir"]
-    plots_dir = (f"{plots_dir}/{parsed_args.input_file.split('/')[-2]}")
-    plot_name = config["artifacts"]["plot"]
-    plot_name = (f'{parsed_args.input_file.split("/")[-2]}_{parsed_args.input_file.split("/")[-1].split(".")[-2]}')
-    plot_dir_path = os.path.join(artifacts_dir, plots_dir)
-    os.makedirs(plot_dir_path, exist_ok=True)
-
-    save_plot(model_list_1 ,pred,plot_name, plot_dir_path, parsed_args.input_file.split("/")[-2], parsed_args.input_file.split("/")[-1].split(".")[-2])
-
-
+    
 if __name__ == "__main__":
 
     training(config_path=parsed_args.config)

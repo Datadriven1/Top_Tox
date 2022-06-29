@@ -117,7 +117,7 @@ def save_model(model, model_name, model_dir_path):
 ## create a function that oversample data of both classes using smote technique
 def oversample_data(x, y):
     
-    sm = KMeansSMOTE(sampling_strategy={0:4000, 1:4000})
+    sm = KMeansSMOTE(sampling_strategy={0:2100, 1:2100})
     x, y = sm.fit_resample(x, y)
     return x, y
 
