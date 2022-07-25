@@ -8,6 +8,7 @@ import os
 import pickle
 from imblearn.over_sampling import KMeansSMOTE
 from imblearn.over_sampling import SMOTE
+from sklearn import metrics
 
 def read_config(config_path):
     with open(config_path) as config_file:
@@ -53,6 +54,7 @@ def drop_missing_values(df, threshold):
 ## creat a function that drop rows which have nan values
 def drop_nan_rows(df):
     return df.dropna()
+
 
 def drop_missing_columns(df):
     return df.drop(missing_columns(df), axis=1)
@@ -114,15 +116,63 @@ def save_model(model, model_name, model_dir_path):
     with open(model_path, "wb") as model_file:
         pickle.dump(model, model_file)
 
-## create a function that oversample data of both classes using smote technique
-def oversample_data(x, y):
-    
-    sm = KMeansSMOTE(sampling_strategy={0:2100, 1:2100})
-    x, y = sm.fit_resample(x, y)
-    return x, y
 
-## create a function that oversample data using smote technique
+
 def oversample_data_minor_class(x, y):
         sm = SMOTE()
         x, y = sm.fit_resample(x, y)
         return x, y
+
+## create a function that remove perticular value of data from dataframe
+def remove_value_from_dataframe(df, column, value):
+    df = df[df[column] != value]
+    return df
+
+
+## creat a function that remove null value from dataframe from specified column
+def remove_null_value_from_dataframe(df, column):
+    df = df[df[column].notnull()]
+    return df
+
+## creat a function that convert column data type from string to integer
+def convert_column_data_type(df, column, data_type):
+    df[column] = df[column].astype(data_type)
+    return df
+
+def stats(y_train, y_pred):
+    confusion_matrix = metrics.confusion_matrix(y_train, y_pred)
+    accuracy = metrics.accuracy_score(y_train, y_pred)
+#    roc_auc_score = metrics.roc_auc_score(y_train, y_pred)
+    Kappa = metrics.cohen_kappa_score(y_train, y_pred, weights='linear')
+    # True and false values
+    TN, FP, FN, TP = confusion_matrix.ravel()  
+    # Sensitivity, hit rate, recall, or true positive rate
+    SE = TP/(TP+FN)
+    # Specificity or true negative rate
+    SP = TN/(TN+FP) 
+    # Precision or positive predictive value
+    PPV = TP/(TP+FP)
+    # Negative predictive value
+    NPV = TN/(TN+FN)
+    # Correct classification rate
+    CCR = (SE + SP)/2
+    d = dict({'Accuracy': accuracy,
+#         'AUC': roc_auc_score,
+         'Kappa': Kappa,
+         'CCR': CCR,
+         'Sensitivity': SE,
+         'PPV': PPV,
+         'Specificity': SP,
+         'NPV': NPV})
+    return pd.DataFrame(d, columns=d.keys(), index=[0]).round(2)
+
+
+## create a funcation that compare mean and standard deviation columns from dataframe and drop the row which have standard deviation heigher then mean and retain row if there is no value for standard deviation
+def remove_outlier_from_dataframe(df, mean_column, std_column):
+    df = df[(df[std_column] < df[mean_column])]
+    return df
+
+## create a funcation that replace nan value with zero
+def replace_nan_with_zero(df, column):
+    df[column] = df[column].fillna(0)
+    return df

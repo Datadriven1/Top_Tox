@@ -45,14 +45,15 @@ def all_classification_model(model_list, x_train, y_train, x_test, y_test, data_
 
 
 
-def single_classification_model(model_name, x_train, y_train, x_test, y_test):
+def single_classification_model(model_name, x_train, y_train, x_test, y_test, x_test_p):
     b_model = model_name()
     b_model.fit(x_train,y_train)
     print('score of:', model_name, "is" , b_model.score(x_train,y_train))
     b_model_pred = b_model.predict(x_test)
+    predication = b_model.predict(x_test_p)
     print('\n')
     print('accuracy_score:', accuracy_score(y_test,b_model_pred))
     print('confusion_matrix: \n', confusion_matrix(y_test,b_model_pred))
     print('classification_report: \n', classification_report(y_test,b_model_pred))
     print('\n')
-    return b_model
+    return predication
