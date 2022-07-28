@@ -21,12 +21,11 @@ def all_classification_model(model_list, x_train, y_train, x_test, y_test, data_
         print('********************************************************************************************')
         print('\n')
         headers = ['Test accuracy',"weighted avg precision","weighted avg recall","weighted avg f1-score","True Positive","False Positive","False Negative","True Negative","Sensitivity score", "Specificity", "Avg_5KCV_Score", "model_name", "features_used"]
-        t_s = p.score(x_train,y_train)
         test_s = accuracy_score(y_test,predp)
         c_r = classification_report(y_test,predp).split('\n')
         weighted_avg = c_r[7]
         w = weighted_avg.split('      ')
-        tp, fp, fn, tn = confusion_matrix(y_test,predp).ravel()
+        tn, fp, fn, tp = confusion_matrix(y_test,predp).ravel()
         Sensitivity = tp/(tp+fn)
         Specificity = tn/(tn+fp)
         clf = p

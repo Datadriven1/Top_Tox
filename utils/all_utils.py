@@ -163,7 +163,11 @@ def stats(y_train, y_pred):
          'Sensitivity': SE,
          'PPV': PPV,
          'Specificity': SP,
-         'NPV': NPV})
+         'NPV': NPV,
+         'TN': TN,
+         'FP': FP,
+         'FN': FN,
+         'TP': TP})
     return pd.DataFrame(d, columns=d.keys(), index=[0]).round(2)
 
 

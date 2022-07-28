@@ -91,18 +91,14 @@ def training(config_path):
     ad = []
     index = []
     cross_val = StratifiedKFold(n_splits=4)
+    print(X_train)
+    print(y_train)
 
     # Do 5-fold loop
     for train_index, test_index in cross_val.split(X_train, y_train):
         print(train_index)
         print(test_index)
-        print(len(train_index))
-        print(len(test_index))
-        print(train_index.shape)
-        print(test_index.shape)
-        print(type(train_index))
-        print(type(test_index))
-    #    fold_model = rf_best.fit(X_train.iloc[train_index], y_train[train_index])
+        fold_model = rf_best.fit(X_train.iloc[train_index], y_train[train_index])
         fold_pred = rf_best.predict(X_train.iloc[test_index])
         fold_ad = rf_best.predict_proba(X_train.iloc[test_index])
         pred.append(fold_pred)
